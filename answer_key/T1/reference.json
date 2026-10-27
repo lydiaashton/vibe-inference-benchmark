@@ -1,0 +1,20 @@
+{
+  "method": "Callaway-Sant'Anna, never-treated controls, simple aggregation (= ATT over treated county-years), county bootstrap",
+  "estimate": 7.179282,
+  "se": 0.213825,
+  "ci": [6.760185, 7.59838],
+  "robustness": {
+    "cs_notyet": {
+      "estimate": 7.037806,
+      "ci": [6.759751, 7.315862]
+    },
+    "sun_abraham": {
+      "estimate": 7.179282,
+      "ci": [6.808663, 7.549902]
+    }
+  },
+  "naive_twfe": {
+    "estimate": -0.447429,
+    "ci": [-0.867489, -0.02737]
+  }
+}

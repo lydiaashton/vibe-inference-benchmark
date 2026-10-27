@@ -1,0 +1,9 @@
+{
+  "method": "difference in means (HC2); covariate-adjusted as robustness; heterogeneity via omnibus Wald (see dgp.json, Python)",
+  "estimate": 0.134392,
+  "ci": [0.057587, 0.211196],
+  "adjusted": {
+    "estimate": 0.132147,
+    "ci": [0.063785, 0.200508]
+  }
+}

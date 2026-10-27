@@ -1,0 +1,10 @@
+{
+  "method": "R/data.table rebuild (member-day ED encounters, PCP = office E/M FM/IM or rev 0517), fixest 2x2 DiD clustered by practice",
+  "n_ed_encounters": 31260,
+  "estimate": 7.906815,
+  "ci": [5.962225, 9.851405],
+  "practice_month_fe": {
+    "estimate": 7.901674,
+    "ci": [5.93172, 9.871627]
+  }
+}

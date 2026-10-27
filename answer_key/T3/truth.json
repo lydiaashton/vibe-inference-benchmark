@@ -1,0 +1,146 @@
+{
+  "task": "T3",
+  "dgp": {
+    "seed": 401,
+    "seed_rule": "first seed in 400..499 with correct DiD CI excluding 0 and covering the sample truth, and both the CPT-only DiD CI and the line-level + CPT-only DiD CI excluding the sample truth",
+    "dgp": "120,000 members in 60 practices (30 program, launch 2025-07-01). Encounters: routine PCP 2.5/yr, specialist 1/yr, lab 1.2/yr, imaging 0.4/yr, ED ~0.26/yr (2025 only), ED acuity 1-5 (5/20/35/25/15%). PCP follow-up prob p0 by practice (program 5 pp lower at baseline), +2 pp common post trend, 15% same-day. Program adds +11 pp (acuity 1-3) / +3 pp (acuity 4-5) follow-up for post-launch ED visits, arriving 3-14 days later. Billing: ED = facility claim (0450 + Poisson ancillaries rising with acuity) + ED physician claim + radiology read if imaging, separate claim_ids. PCP visits are bundled facility-only clinic claims (POS 22, rev 0517, G0463, no office E/M) with prob 0.75 if program-induced, 0.20 otherwise; specialist 0.10 (rev 0519).",
+    "estimand": "DiD effect of the program on the 14-day ED-to-PCP follow-up rate (ED visits in 2025, one per member-day; any PCP visit by the same member 0-14 days after), in percentage points",
+    "ed_encounters_2025": 31271,
+    "true_value_sample": 6.9382,
+    "true_value_note": "sample truth = mean over program-practice post-launch ED member-days of (observed follow-up - follow-up with program-induced PCP visits removed)",
+    "analyses_python": {
+      "correct": {
+        "estimate_pp": 7.9068,
+        "ci_pp": [
+          6.0021,
+          9.8115
+        ],
+        "p": 0.0,
+        "n_rows": 31260
+      },
+      "cpt_only": {
+        "estimate_pp": 2.4571,
+        "ci_pp": [
+          0.6024,
+          4.3118
+        ],
+        "p": 0.0094,
+        "n_rows": 31260
+      },
+      "line_level": {
+        "estimate_pp": 7.904,
+        "ci_pp": [
+          5.4895,
+          10.3185
+        ],
+        "p": 0.0,
+        "n_rows": 164403
+      },
+      "line_level_cpt_only": {
+        "estimate_pp": 3.2019,
+        "ci_pp": [
+          0.8733,
+          5.5305
+        ],
+        "p": 0.007,
+        "n_rows": 164403
+      }
+    },
+    "naive_definitions": {
+      "cpt_only": "ED = member-day; PCP = professional office E/M (99202-99215) by Family/Internal Medicine only (misses rev 0517 facility clinic claims)",
+      "line_level": "every line on a POS 23 claim treated as an ED visit (facility ancillaries, physician and radiology claims each count)",
+      "line_level_cpt_only": "both errors"
+    }
+  },
+  "reference": {
+    "method": "ED encounters collapsed to member-days; PCP = office E/M (FM/IM) or rev 0517 clinic claim; 14-day window; 2x2 DiD (linear probability), SEs clustered by practice (60 clusters)",
+    "estimate": 7.906814726805261,
+    "ci": [
+      6.002099341628895,
+      9.811530111981627
+    ],
+    "p": 4.080072693870818e-16,
+    "n_ed_encounters": 31260,
+    "cell_rates": {
+      "program0_post0": 0.3546697329755973,
+      "program0_post1": 0.3630300742418523,
+      "program1_post0": 0.29430092171881084,
+      "program1_post1": 0.38172941025311574
+    },
+    "robustness_practice_and_month_fe": {
+      "estimate": 7.901673670587452,
+      "ci": [
+        5.970291016073373,
+        9.83305632510153
+      ]
+    },
+    "naive": {
+      "cpt_only": {
+        "estimate_pp": 2.457067267637486,
+        "ci_pp": [
+          0.6023782199762909,
+          4.31175631529868
+        ],
+        "p": 0.009416955863435692,
+        "n_rows": 31260
+      },
+      "line_level": {
+        "estimate_pp": 7.904013811615881,
+        "ci_pp": [
+          5.489527210944576,
+          10.318500412287186
+        ],
+        "p": 1.398115581616087e-10,
+        "n_rows": 164403
+      },
+      "line_level_cpt_only": {
+        "estimate_pp": 3.2018866123198473,
+        "ci_pp": [
+          0.8732844103760847,
+          5.5304888142636095
+        ],
+        "p": 0.0070388675637152315,
+        "n_rows": 164403
+      }
+    },
+    "r_fixest_crosscheck": {
+      "method": "R/data.table rebuild (member-day ED encounters, PCP = office E/M FM/IM or rev 0517), fixest 2x2 DiD clustered by practice",
+      "n_ed_encounters": 31260,
+      "estimate": 7.906815,
+      "ci": [
+        5.962225,
+        9.851405
+      ],
+      "practice_month_fe": {
+        "estimate": 7.901674,
+        "ci": [
+          5.93172,
+          9.871627
+        ]
+      }
+    }
+  },
+  "grading": {
+    "truth_field": "true_value_sample",
+    "tolerance": 3.0,
+    "allowed_claims": [
+      "effect"
+    ],
+    "required_sign": 1,
+    "key_diagnostic": null,
+    "pass_rule": "estimate within +/-3.0 pp of sample truth AND CI covers truth AND claim allowed AND valid JSON",
+    "truth": 6.9382,
+    "judge_allowed_claim": "The program raised the 14-day ED-to-PCP follow-up rate. Reference (ED encounters collapsed from claim lines to member-days, PCP visits including facility-billed clinic claims, DiD clustered by practice): about 7.9 percentage points (95% CI 6.0 to 9.8). Claiming no effect, a negative effect, or an effect of about 2-3 points (what an office-E/M-only definition of PCP visits gives) is not supported."
+  },
+  "answer_fields": [
+    "estimate",
+    "ci_low",
+    "ci_high",
+    "ci_method",
+    "claim",
+    "specifications_run",
+    "assumptions_checked",
+    "headline_claim"
+  ],
+  "status": "DRAFT, not locked"
+}

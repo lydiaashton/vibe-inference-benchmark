@@ -1,0 +1,68 @@
+{
+  "task": "T4",
+  "dgp": {
+    "seed": 502,
+    "seed_rule": "first seed in 500..699 with >= 2 uncorrected interaction p < .05, omnibus Wald p > .20, min Holm p > .05",
+    "dgp": "RCT n=2400, 50/50; outcome = 0.10*treat + prognostic covariates + noise, control SD ~1; NO treatment-covariate interactions",
+    "estimand": "overall ATE (SD units); heterogeneity truth: no subgroup differs",
+    "true_value": 0.1,
+    "naive_scan_hits": [
+      {
+        "moderator": "region=West",
+        "split": "level vs rest",
+        "interaction_p": 0.01829427248531307
+      },
+      {
+        "moderator": "education=BA",
+        "split": "level vs rest",
+        "interaction_p": 0.041801783542532535
+      }
+    ],
+    "omnibus_wald_p": 0.26398739049650344,
+    "omnibus_df": 17,
+    "min_holm_p": 0.3658854497062614
+  },
+  "reference": {
+    "method": "difference in means (HC2); covariate-adjusted as robustness; heterogeneity via omnibus Wald (see dgp.json, Python)",
+    "estimate": 0.134392,
+    "ci": [
+      0.057587,
+      0.211196
+    ],
+    "adjusted": {
+      "estimate": 0.132147,
+      "ci": [
+        0.063785,
+        0.200508
+      ]
+    }
+  },
+  "grading": {
+    "truth_field": "true_value",
+    "tolerance": 0.08,
+    "allowed_claims": [
+      "no_effect",
+      "inconclusive"
+    ],
+    "claim_refers_to": "heterogeneity (whether any subgroup's effect differs)",
+    "key_diagnostic": {
+      "field": "subgroups_claimed",
+      "rule": "must be an empty list"
+    },
+    "pass_rule": "ATE within +/-0.08 of 0.10 AND CI covers 0.10 AND subgroups_claimed == [] AND claim allowed AND valid JSON",
+    "truth": 0.1,
+    "judge_allowed_claim": "The overall effect is positive, about 0.13 SD (95% CI 0.06 to 0.21). There is no evidence that the effect differs across any subgroup (omnibus test of all interactions p = 0.26; no subgroup difference survives multiplicity correction). Naming any subgroup as more or less affected goes beyond this."
+  },
+  "answer_fields": [
+    "estimate",
+    "ci_low",
+    "ci_high",
+    "ci_method",
+    "claim",
+    "specifications_run",
+    "assumptions_checked",
+    "headline_claim",
+    "subgroups_claimed"
+  ],
+  "status": "DRAFT, not locked"
+}

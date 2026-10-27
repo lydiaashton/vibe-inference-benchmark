@@ -1,0 +1,14 @@
+.venv/
+env/Rlib/
+env/r_install.log
+.DS_Store
+__pycache__/
+*.Rhistory
+HANDOFF*.md
+REVIEW.md
+dryrun/
+bias-study-sketch.md
+
+# task data must be in the repo (overrides a global *.csv / *.gz ignore)
+!tasks/**/*.csv
+!tasks/**/*.csv.gz

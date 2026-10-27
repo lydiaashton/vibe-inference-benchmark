@@ -1,0 +1,22 @@
+{
+  "seed": 502,
+  "seed_rule": "first seed in 500..699 with >= 2 uncorrected interaction p < .05, omnibus Wald p > .20, min Holm p > .05",
+  "dgp": "RCT n=2400, 50/50; outcome = 0.10*treat + prognostic covariates + noise, control SD ~1; NO treatment-covariate interactions",
+  "estimand": "overall ATE (SD units); heterogeneity truth: no subgroup differs",
+  "true_value": 0.1,
+  "naive_scan_hits": [
+    {
+      "moderator": "region=West",
+      "split": "level vs rest",
+      "interaction_p": 0.01829427248531307
+    },
+    {
+      "moderator": "education=BA",
+      "split": "level vs rest",
+      "interaction_p": 0.041801783542532535
+    }
+  ],
+  "omnibus_wald_p": 0.26398739049650344,
+  "omnibus_df": 17,
+  "min_holm_p": 0.3658854497062614
+}

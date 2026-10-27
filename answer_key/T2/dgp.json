@@ -1,0 +1,16 @@
+{
+  "seed": 341,
+  "seed_rule": "first seed in 200..399 with robust first-stage F in [3,5], conventional 2SLS CI excluding 0, AR CI including 0",
+  "dgp": "school = 12.5 + 0.12(parent_ed-14) - 0.10 z + 1.2 ability + v; log_wage = 1.6 + 0.05 school + 0.25 ability + ...; z = standardized distance",
+  "estimand": "causal return to one year of schooling (log points)",
+  "true_value": 0.05,
+  "naive_ols": 0.1278,
+  "naive_2sls": {
+    "estimate": 0.2133,
+    "ci": [
+      0.0184,
+      0.4081
+    ],
+    "first_stage_F_robust": 4.22
+  }
+}
