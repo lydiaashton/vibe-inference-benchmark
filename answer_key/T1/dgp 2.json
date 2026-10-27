@@ -1,0 +1,8 @@
+{
+  "seed": 100,
+  "seed_rule": "first seed in 100..199 with sign(TWFE) != sign(true ATT)",
+  "dgp": "y_it = 10 + a_i + d_t + tau_it + e_it; tau_it = (t - g_i + 1) for t >= g_i; cohorts 2006/2011/2016 (55/20/17%), 8% never treated; 300 counties x 2005-2020",
+  "estimand": "ATT averaged over all treated county-years",
+  "true_value": 6.9953,
+  "naive_twfe": -0.4474
+}
