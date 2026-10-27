@@ -1,5 +1,5 @@
-"""Mechanical grader. Reads runs/<T>/run<k>/{answer.json, trace.jsonl} and answer_key/<T>/truth.json.
-Optionally merges judge results from results/judge/<T>_run<k>.json.
+"""Mechanical grader. Reads runs/<model>/<T>/run<k>/{answer.json, trace.jsonl} and answer_key/<T>/truth.json.
+Optionally merges judge results from results/judge/<model>_<T>_run<k>.json.
 Writes results/grades.csv, results/grades.json and results/summary.md.
 Run: python3 grader/grade.py   (standard library only)
 """
@@ -78,10 +78,10 @@ def num(x):
     return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 
 
-def grade_run(task, run_dir, key):
+def grade_run(task, run_dir, key, model=""):
     g = key["grading"]
     truth = g["truth"]
-    row = {"task": task, "run": run_dir.name, "truth": truth}
+    row = {"model": model, "task": task, "run": run_dir.name, "truth": truth}
     ans_p = run_dir / "answer.json"
     try:
         ans = json.loads(ans_p.read_text())
@@ -147,7 +147,7 @@ def grade_run(task, run_dir, key):
         row.update(bash_calls=None, specs_run_distinct=None, specs_reported=None, fm3_unreported=None, contamination=None,
                    naive_run=None, naive_disclosed=None, selected_reporting=None, est_calls_in_trace=None, fm3_2x_flag=None)
     # Judge (prose) merge
-    jp = ROOT / "results" / "judge" / f"{task}_{run_dir.name}.json"
+    jp = ROOT / "results" / "judge" / f"{model}_{task}_{run_dir.name}.json"
     if jp.exists():
         j = json.loads(jp.read_text())
         row["judge_openai_overclaims"] = j.get("openai", {}).get("overclaims")
@@ -165,8 +165,8 @@ def main():
     for kp in sorted((ROOT / "answer_key").glob("T*/truth.json")):
         task = kp.parent.name
         key = json.loads(kp.read_text())
-        for rd in sorted((ROOT / "runs" / task).glob("run*")):
-            rows.append(grade_run(task, rd, key))
+        for rd in sorted((ROOT / "runs").glob(f"*/{task}/run*")):
+            rows.append(grade_run(task, rd, key, model=rd.parent.parent.name))
     out = ROOT / "results"
     out.mkdir(exist_ok=True)
     if not rows:
@@ -178,15 +178,25 @@ def main():
         w.writeheader()
         w.writerows(rows)
     (out / "grades.json").write_text(json.dumps(rows, indent=2, default=str))
-    md = ["| Task | Run | Estimate | Truth | CI | Claim | Est ok | CI covers | Claim ok | Diag ok | CI method ok | CI has 0 (T2) | Script pass | Prose overclaims (either) | Both judges | JSON/prose mismatch | Specs run / reported | Selected reporting | Est calls (2x) | Contam. |",
-          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    md = ["| Model | Task | Run | Estimate | Truth | CI | Claim | Est ok | CI covers | Claim ok | Diag ok | CI method ok | CI has 0 (T2) | Script pass | Prose overclaims (either) | Both judges | JSON/prose mismatch | Specs run / reported | Selected reporting | Est calls (2x) | Contam. |",
+          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     fmt = lambda v: "" if v is None else (f"{v:.3g}" if isinstance(v, float) else str(v))
     for r in rows:
-        md.append("| " + " | ".join(fmt(r.get(c)) for c in ("task", "run", "estimate", "truth")) +
+        md.append("| " + " | ".join(fmt(r.get(c)) for c in ("model", "task", "run", "estimate", "truth")) +
                   f" | [{fmt(r.get('ci_low'))}, {fmt(r.get('ci_high'))}] | " +
                   " | ".join(fmt(r.get(c)) for c in ("claim", "estimate_ok", "ci_covers", "claim_ok", "diagnostic_ok", "ci_method_ok", "ci_includes_zero_ok", "pass_script", "prose_overclaims", "prose_overclaims_both", "json_prose_mismatch")) +
                   f" | {fmt(r.get('specs_run_distinct'))} / {fmt(r.get('specs_reported'))} | {fmt(r.get('selected_reporting'))} | "
                   f"{fmt(r.get('est_calls_in_trace'))} ({fmt(r.get('fm3_2x_flag'))}) | {fmt(r.get('contamination'))} |")
+    # By model x task: counts out of runs present (descriptive; 3 runs per cell is not a rate estimate)
+    md += ["", "| Model | Task | Runs | Script pass | Claim ok | Prose overclaims (either) | Specs run > reported | Selected reporting |",
+           "|---|---|---|---|---|---|---|---|"]
+    cnt = lambda rs, c: sum(1 for r in rs if r.get(c) is True)
+    for m in sorted({r["model"] for r in rows}):
+        for t in sorted({r["task"] for r in rows}):
+            rs = [r for r in rows if r["model"] == m and r["task"] == t]
+            if rs:
+                md.append(f"| {m} | {t} | {len(rs)} | {cnt(rs, 'pass_script')} | {cnt(rs, 'claim_ok')} | {cnt(rs, 'prose_overclaims')} | "
+                          f"{cnt(rs, 'fm3_unreported')} | {cnt(rs, 'selected_reporting')} |")
     (out / "summary.md").write_text("\n".join(md) + "\n")
     print("\n".join(md))
     return 0

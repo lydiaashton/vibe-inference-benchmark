@@ -1,12 +1,12 @@
 """Summarize one run's stream-json trace: exact model string, turns, duration, cost, usage, errors.
-Usage: python3 runner/run_meta.py <run_dir> <exit_code> <seconds> <model_alias>
+Usage: python3 runner/run_meta.py <run_dir> <exit_code> <seconds> <model_id>
 """
 import json
 import sys
 from pathlib import Path
 
 run, rc, secs, alias = Path(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]
-meta = {"exit_code": rc, "wall_seconds": secs, "model_alias": alias, "model": None, "num_turns": None,
+meta = {"exit_code": rc, "wall_seconds": secs, "model_requested": alias, "model": None, "num_turns": None,
         "total_cost_usd_equiv": None, "usage": None, "result_subtype": None, "is_error": None,
         "tool_calls": 0, "answer_json_present": (run / "answer.json").exists()}
 models = set()
