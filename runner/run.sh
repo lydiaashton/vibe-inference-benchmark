@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Headless runner. Usage:
-#   runner/run.sh T1            # runs 1..3 for one task, each on every model in MODELS
-#   runner/run.sh T1 1          # a single run per model
-#   runner/run.sh all           # 4 tasks x 3 runs x 2 models, sequential, alternating models
+#   runner/run.sh T1            # runs 1..3 for one task
+#   runner/run.sh T1 1          # a single run (dry run)
+#   runner/run.sh all           # all 4 tasks x 3 runs, sequentially
 #   RUNS_DIR="$PWD/dryrun" runner/run.sh T2 1   # pre-lock dry run, kept out of runs/ and the grader
-#   MODELS=claude-sonnet-5 runner/run.sh T3 2  # restrict to one model
 #
 # Each run works in an ISOLATED folder outside this repo ($RUN_ROOT/<task>/run<k>), so the
 # model cannot see answer_key/, build/ or any parent CLAUDE.md. Afterwards the folder is
@@ -16,7 +15,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 RUN_ROOT="${RUN_ROOT:-$HOME/vib-bench-runs}"
 RUNS_DIR="${RUNS_DIR:-$REPO/runs}"   # set RUNS_DIR=$REPO/dryrun for a pre-lock dry run
-MODELS="${MODELS:-claude-opus-5 claude-sonnet-5}"   # exact model IDs, not aliases; fixed at the lock
+MODELS="${MODELS:-claude-opus-5}"   # exact model ID, not an alias; fixed at the lock (space-separated list allowed)
 MAX_TURNS="${MAX_TURNS:-60}"
 TIMEOUT_MIN="${TIMEOUT_MIN:-45}"
 ALLOWED_TOOLS="Read,Write,Edit,Bash,Glob,Grep"
