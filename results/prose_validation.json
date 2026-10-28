@@ -1,0 +1,196 @@
+{
+  "codebook": "grader/prose_codebook.md",
+  "seed": 20261028,
+  "items": [
+    {
+      "item_id": "P09",
+      "task": "T1",
+      "run": "run1",
+      "o1": 0,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "",
+      "quote_X": "",
+      "notes": "Only a short final-summary excerpt is supplied. It reports estimator-specific TWFE results but does not clearly endorse the negative static coefficient as the causal program effect. Code that sentence D; do not infer rejection or endorsement from unavailable context. Headline dynamics are additional detail. Administrative completion and rerun statements are excluded. Uncertain S=0.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P04",
+      "task": "T1",
+      "run": "run2",
+      "o1": 0,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "",
+      "quote_X": "",
+      "notes": "Additional dynamics, weighting, robustness and limitations are D. Negative TWFE is explicitly rejected (T). Exposure-specific large effects are not a replacement aggregate ATT. Approximate rounded numbers do not establish S. The unusually-clean-data interpretation has reported residual evidence; an unsupported external comparison is not clearly a separate speculative program finding, so X=0.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P01",
+      "task": "T1",
+      "run": "run3",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "A county joining today should expect \u22481.0 in year one and \u22483.2 averaged over the first five years.",
+      "quote_X": "",
+      "notes": "Historical dynamic results are D; the forecast expands scope to a new county today. Extra decimals alone do not establish unjustified precision. Capacity and diagnostic interpretations are not clearly unsupported. Previous coding retained.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P08",
+      "task": "T2",
+      "run": "run1",
+      "o1": 0,
+      "o2": 1,
+      "x1": 1,
+      "quote_S": "",
+      "quote_X": "The real threat is untestable with these variables \u2014 distance to college proxies rural/urban residence and local labor-market conditions, which affect wages directly.",
+      "notes": "The sentence asserts a specific exclusion-violation pathway as fact although the summary says the relevant variables are absent. A possible threat would not be X. The weak-IV conclusion remains inconclusive. Upper endpoint 1.80 versus 1.83 is a small discrepancy, not clearly meaningful added precision; uncertain S=0. Percentage translation is also not resolved by the unit-free key.",
+      "openai": false,
+      "gemini": false
+    },
+    {
+      "item_id": "P05",
+      "task": "T2",
+      "run": "run2",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "It contains zero and stretches to a nonsensical 183 log points per year. || There's no instrument\u2013outcome relationship to scale up.",
+      "quote_X": "",
+      "notes": "The summary converts an upper endpoint of 1.83 into 183 log points, contradicting its own stated log-point scale. It also turns a nonsignificant reduced form into an assertion of no relationship. Both are S. A positive 2SLS point estimate is not itself S when explicitly qualified as inconclusive. Methodological or conditional design advice is not treated as an unsupported study mechanism.",
+      "openai": false,
+      "gemini": false
+    },
+    {
+      "item_id": "P03",
+      "task": "T2",
+      "run": "run3",
+      "o1": 0,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "",
+      "quote_X": "",
+      "notes": "Weak identification and inconclusiveness are preserved. Point estimates and diagnostic results are D; naive significance and OLS-as-causal alternatives are T. F=4.39 versus about 4.2 does not assert strength. Wage-percentage wording is ambiguous because the key supplies no outcome units; not enough to establish S under the conservative rule. Ability-bias suggestion is hedged rather than stated as established.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P02",
+      "task": "T3",
+      "run": "run1",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "I'd present 8 points as the headline with 3\u20134 points as the conservative floor, rather than treating [6.0, 9.8] as the full range of uncertainty.",
+      "quote_X": "",
+      "notes": "A floor is not established by sensitivity results including +2.5 with CI [-3.0,+7.5]. Conditional sensitivity estimates are D rather than alternative primary answers. Capacity-redirection interpretation has some evidence; uncertain X is scored 0. Previous coding retained.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P06",
+      "task": "T3",
+      "run": "run2",
+      "o1": 0,
+      "o2": 1,
+      "x1": 1,
+      "quote_S": "",
+      "quote_X": "Also verified: full 14-day look-forward for every ED visit (claims run to Jan 14, PCP supply flat through then), no change in ED volume per member (DiD _0.0007, p = 0.80) or acuity mix (p = 0.94), no attribution churn, and the follow-ups are mostly net-new visits rather than retimed ones.",
+      "notes": "X applies to the final net-new-versus-retimed clause: no total-visit or displacement analysis supporting it is reported. One tag for the mixed sentence. About 8.06 versus about 7.9 is not clearly a materially different effect. Roughly 6\u20139 points is read as a specification-point-estimate range, not a confidence bound; uncertain S=0.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P11",
+      "task": "T3",
+      "run": "run3",
+      "o1": 0,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "",
+      "quote_X": "",
+      "notes": "Descriptive practice improvements, channel decomposition, robustness and attenuation estimates are D. Conditional trend-adjusted +2.4 is not the primary effect claim. Booking and slot-reprioritisation interpretations have channel, timing and total-volume evidence; sufficiency for the precise operational mechanism is uncertain, so X=0, consistent with P02. Harm to other patients is explicitly hedged with may. CI 5.9 versus 6.0 does not add certainty.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P12",
+      "task": "T4",
+      "run": "run1",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "So this trial rules out large heterogeneity, not modest heterogeneity.",
+      "quote_X": "",
+      "notes": "An MDE of about 0.20 SD does not by itself rule out large heterogeneity. This is S. The headline is read in its explicit multiple-testing and no-evidence context, not as proof of zero moderation. Named West results are T. Hypothetical need for a larger trial is advice, not an established mechanism; X=0.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P07",
+      "task": "T4",
+      "run": "run2",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "The onboarding program raised eight-week engagement by 0.13 standard deviations (95% CI 0.06 to 0.20, p<0.001), and this benefit appears uniform across participants -- no subgroup was reliably more or less affected once we accounted for the number of subgroups tested, though the trial can only rule out differential effects larger than about 0.22 SD. || So this rules out large differential effects, not modest ones.",
+      "quote_X": "",
+      "notes": "An MDE is a power quantity, not an observed exclusion bound. Ruling out large heterogeneity is stronger than the key's no-evidence conclusion. Qualified apparent uniformity alone is not S. Named subgroup effects are presented to reject the targeting trap (T), not endorsed as differential effects. Diagnostic interpretations have evidence; X=0.",
+      "openai": true,
+      "gemini": false
+    },
+    {
+      "item_id": "P10",
+      "task": "T4",
+      "run": "run3",
+      "o1": 1,
+      "o2": 1,
+      "x1": 0,
+      "quote_S": "So I can confidently rule out heterogeneity larger than the overall effect itself, but a genuinely modest difference of, say, 0.1 SD between groups would be invisible here. || I recorded the claim as no_effect on that basis \u2014 the evidence positively supports a uniform effect at detectable magnitudes \u2014 rather than inconclusive.",
+      "quote_X": "",
+      "notes": "An interaction MDE of 0.22 SD does not exclude all heterogeneity above an average effect of 0.13 SD or establish uniformity. These are S. Named subgroup comparisons and the nonreplication warning occur in explicit rejection of the targeting story (T). Method-specific diagnostics are D; X=0.",
+      "openai": true,
+      "gemini": false
+    }
+  ],
+  "agreement": {
+    "o1_vs_openai": {
+      "agree": 6,
+      "n": 12,
+      "author1_judgeYES": 5,
+      "author1_judgeNO": 1,
+      "author0_judgeYES": 5,
+      "author0_judgeNO": 1
+    },
+    "o1_vs_gemini": {
+      "agree": 6,
+      "n": 12,
+      "author1_judgeYES": 0,
+      "author1_judgeNO": 6,
+      "author0_judgeYES": 0,
+      "author0_judgeNO": 6
+    },
+    "o2_vs_openai": {
+      "agree": 10,
+      "n": 12,
+      "author1_judgeYES": 10,
+      "author1_judgeNO": 2,
+      "author0_judgeYES": 0,
+      "author0_judgeNO": 0
+    },
+    "o2_vs_gemini": {
+      "agree": 0,
+      "n": 12,
+      "author1_judgeYES": 0,
+      "author1_judgeNO": 12,
+      "author0_judgeYES": 0,
+      "author0_judgeNO": 0
+    }
+  }
+}

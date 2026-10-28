@@ -13,3 +13,8 @@ bias-study-sketch.md
 !tasks/**/*.csv
 !tasks/**/*.csv.gz
 review/
+
+# per-run data copies (identical to tasks/)
+runs/**/data.csv
+runs/**/practices.csv
+runs/**/claim_lines.csv.gz

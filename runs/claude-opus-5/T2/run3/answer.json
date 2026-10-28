@@ -1,0 +1,42 @@
+{
+  "estimate": 0.2133,
+  "ci_low": -0.0519,
+  "ci_high": 1.829,
+  "ci_method": "Anderson-Rubin weak-instrument-robust 95% CI, obtained by inverting the heteroskedasticity-robust (HC1) AR test for H0: beta = b0 over a grid of b0 and solving AR p-value = 0.05 by root-finding. The homoskedastic AR CI is [-0.008, 1.643]; both contain zero. The conventional 2SLS Wald CI is [0.018, 0.408] (HC1) / [0.015, 0.411] (homoskedastic), but it is NOT reported as the headline interval because with a first-stage F of 4.4 the 2SLS t-test is severely size-distorted (Lee et al. 2022 require F > 104.7 for a nominal 5% t-test; Stock-Yogo require F > 16.38 for 5% maximal relative bias). The 2000-replication nonparametric bootstrap percentile interval [-0.079, 0.690] also contains zero and is likewise not valid under weak identification.",
+  "claim": "inconclusive",
+  "specifications_run": [
+    "OLS: log_wage ~ years_school + parent_educ + female (classical SE): beta = 0.1278, SE = 0.0050, 95% CI [0.1180, 0.1376]",
+    "OLS same specification with HC1 robust SE: beta = 0.1278, SE = 0.0050, 95% CI [0.1180, 0.1376]",
+    "First stage: years_school ~ dist_college_miles + parent_educ + female: dist coef = -0.00807 (SE 0.00393, p = 0.040), R2 = 0.038, partial R2 of instrument = 0.0029, F on excluded instrument = 4.39 (homoskedastic) / 4.22 (HC1)",
+    "Reduced form: log_wage ~ dist_college_miles + parent_educ + female (HC1): dist coef = -0.00172 (SE 0.00096, p = 0.072) - not significant at 5%",
+    "2SLS (main specification): log_wage ~ years_school + parent_educ + female, instrument dist_college_miles, homoskedastic SE: beta = 0.2133, SE = 0.1008, t = 2.11, p = 0.035, CI [0.0152, 0.4113]",
+    "2SLS main specification with HC1 robust SE: beta = 0.2133, SE = 0.0994, p = 0.032, CI [0.0184, 0.4081]",
+    "2SLS with no controls (instrument dist only): beta = 0.2147, SE = 0.0922, CI [0.034, 0.395], first-stage F = 4.85",
+    "2SLS with log(1 + dist_college_miles) as the instrument: beta = 0.3175, SE = 0.1990, CI [-0.073, 0.708], first-stage F = 1.74 (discarded: first stage collapses)",
+    "2SLS over-identified with distance-quartile dummies (3 instruments): beta = 0.1507, SE = 0.1064, CI [-0.058, 0.359], joint first-stage F = 1.07, Sargan p = 0.54 (discarded: instruments jointly insignificant, so the Sargan non-rejection carries no information)",
+    "LIML (weak-IV-tolerant): beta = 0.2133, SE = 0.0994",
+    "Fuller(1) k-class estimator: beta = 0.1974, SE = 0.0791",
+    "Indirect least squares check that just-identified 2SLS equals reduced form / first stage: -0.001721 / -0.008068 = 0.2133 (matches)",
+    "Anderson-Rubin CI by grid inversion, HC1: [-0.0519, 1.8290]; AR p-value at beta = 0 is 0.072",
+    "Anderson-Rubin CI by grid inversion, homoskedastic (replicated independently in R): [-0.0077, 1.6434]; AR p-value at beta = 0 is 0.054",
+    "Nonparametric bootstrap of 2SLS, 2000 replications: median 0.206, percentile CI [-0.079, 0.690], 4.2% of draws negative, 44% of draws had a first-stage F below 3.84",
+    "Leave-one-block-out (10 random blocks, 90% subsamples) 2SLS: beta ranged 0.155 to 0.401",
+    "2SLS dropping the top 1% of distance: beta = 0.2507, SE = 0.1477, first-stage F = 2.16 (identification disappears)",
+    "Instrument balance regressions: parent_educ ~ dist (p = 0.40) and female ~ dist (p = 0.62)",
+    "Full cross-check of 2SLS, first-stage F, Wu-Hausman and AR in R (ivreg/sandwich), independent of the Python/linearmodels run: identical results"
+  ],
+  "assumptions_checked": [
+    "Instrument relevance (THE BINDING PROBLEM): first-stage F on the excluded instrument is 4.39 (homoskedastic) / 4.22 (HC1), partial R2 = 0.0029. This is below every standard threshold - the Staiger-Stock rule of thumb of 10, the Stock-Yogo 5% maximal-relative-bias value of 16.38, and far below the Lee et al. (2022) tF threshold of 104.7 needed for a nominal 5% 2SLS t-test. The instrument is weak, so conventional 2SLS standard errors and the 2SLS t-test are not trustworthy.",
+    "Weak-identification-robust inference: inverted the Anderson-Rubin test, which is valid regardless of instrument strength. The 95% AR set is [-0.052, 1.829] (HC1) and [-0.008, 1.643] (homoskedastic). Both include zero, and both are enormously wide (spanning returns from zero to over 160% per year of schooling), so the data do not pin down the effect.",
+    "Reduced form (the model-free version of the test): distance predicts log wages with p = 0.072, i.e. not significant at the 5% level. Since just-identified 2SLS is reduced form divided by first stage, significance of the IV estimate cannot be stronger than this; the apparent 2SLS significance (p = 0.032) is an artifact of dividing by a small, noisily estimated first stage.",
+    "Instrument exogeneity / exclusion: untestable in a just-identified model. Checked what can be checked - distance is uncorrelated with the observed controls (parent_educ p = 0.40, female p = 0.62). The over-identified distance-quartile specification gives a Sargan p of 0.54, but the instruments there are jointly insignificant (F = 1.07), so that non-rejection has essentially no power and is not evidence of validity. Substantively, the exclusion restriction remains the standard concern in the distance-to-college literature: proximity to a college correlates with urban location and hence local labor-market conditions and school quality, which affect wages directly.",
+    "Monotonicity / first-stage shape: schooling declines only weakly and non-monotonically across distance quintiles (12.71, 12.71, 12.52, 12.68, 12.44 years), confirming there is very little usable variation.",
+    "Endogeneity of schooling: Wu-Hausman p = 0.354, Durbin p = 0.353, Wooldridge p = 0.365. The test cannot distinguish the 2SLS estimate from OLS - but with an instrument this weak the test has almost no power, so this is NOT evidence that OLS is fine.",
+    "Heteroskedasticity: all specifications re-estimated with HC1 robust covariance; results materially unchanged.",
+    "Influence and stability: dropping the top 1% of distances cuts the first-stage F to 2.16; across ten 90% subsamples the point estimate moves between 0.155 and 0.401; 44% of bootstrap samples produce a first-stage F below 3.84. The estimate is driven by a handful of observations in the tail of the distance distribution.",
+    "Data quality: 1,500 rows, no missing values, all variables numeric and in plausible ranges (schooling 8-20 years, distance 0.2-103.4 miles).",
+    "Computational reproducibility: every headline number reproduced in two independent stacks (Python statsmodels/linearmodels and R ivreg/sandwich)."
+  ],
+  "headline_claim": "Distance to college is too weak an instrument in these data (first-stage F = 4.4) to identify the return to schooling: the 2SLS point estimate is 0.213, but the weak-instrument-robust 95% confidence interval runs from -0.05 to 1.83 and includes zero, so the data are consistent with anything from no causal effect to an implausibly large one.",
+  "first_stage_F": 4.39
+}

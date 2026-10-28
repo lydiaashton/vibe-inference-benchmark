@@ -1,0 +1,139 @@
+==== A. Static TWFE ====
+OLS estimation, Dep. Var.: new_biz_per_10k
+Observations: 4,800
+Fixed-effects: county_id: 300,  year: 16
+Standard-errors: Clustered (county_id) 
+         Estimate Std. Error  t value Pr(>|t|)    
+program -0.447429   0.213453 -2.09615 0.036909 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.92435     Adj. R2: 0.89322 
+                Within R2: 0.003603
+             2.5 %     97.5 %
+program -0.8674886 -0.0273695
+
+==== B. TWFE + county linear trends ====
+OLS estimation, Dep. Var.: new_biz_per_10k
+Observations: 4,800
+Fixed-effects: county_id: 300,  year: 16
+Varying slopes: year (county_id): 300
+Standard-errors: Clustered (county_id) 
+        Estimate Std. Error t value  Pr(>|t|)    
+program 0.828326   0.078753  10.518 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.04581     Adj. R2: 0.966201
+                Within R2: 0.02639 
+           2.5 %   97.5 %
+program 0.673346 0.983306
+
+==== C. CS never-treated, simple ====
+
+Call:
+aggte(MP = cs1, type = "simple", na.rm = TRUE)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. <https://doi.org/10.1016/j.jeconom.2020.12.001>, <https://arxiv.org/abs/1803.09015> 
+
+
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 7.1793        0.2171     6.7538      7.6048 *
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust
+
+==== D. CS not-yet-treated, simple ====
+
+Call:
+aggte(MP = cs2, type = "simple", na.rm = TRUE)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. <https://doi.org/10.1016/j.jeconom.2020.12.001>, <https://arxiv.org/abs/1803.09015> 
+
+
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 7.0378        0.1488     6.7462      7.3294 *
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Not Yet Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust
+pretest p notyet: 0.73546 
+
+==== E. CS never-treated, universal base period ====
+
+Call:
+aggte(MP = cs3, type = "simple", na.rm = TRUE)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. <https://doi.org/10.1016/j.jeconom.2020.12.001>, <https://arxiv.org/abs/1803.09015> 
+
+
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 7.1793        0.2171     6.7538      7.6048 *
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust
+
+==== F. CS, analytical (non-bootstrap) SE, never-treated simple ====
+
+Call:
+aggte(MP = cs4, type = "simple", na.rm = TRUE, bstrap = FALSE)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. <https://doi.org/10.1016/j.jeconom.2020.12.001>, <https://arxiv.org/abs/1803.09015> 
+
+
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 7.1793        0.2088     6.7701      7.5885 *
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust
+
+==== G. Sun-Abraham (sunab), never-treated ref ====
+OLS estimation, Dep. Var.: new_biz_per_10k
+Observations: 4,800
+Fixed-effects: county_id: 300,  year: 16
+Standard-errors: Clustered (county_id) 
+    Estimate Std. Error t value  Pr(>|t|)    
+ATT  7.17928    0.18833 38.1209 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 0.95953     Adj. R2: 0.973188
+                Within R2: 0.752267
+       2.5 %   97.5 %
+ATT 6.808663 7.549902
+
+==== H. Drop 2006 cohort (only 1 pre-period) : CS simple ====
+
+Call:
+aggte(MP = cs5, type = "simple", na.rm = TRUE)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. <https://doi.org/10.1016/j.jeconom.2020.12.001>, <https://arxiv.org/abs/1803.09015> 
+
+
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 4.7211        0.2075     4.3144      5.1278 *
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust
+pretest p: 0.6917 
+
+==== I. Treated-county-year weights check ====
+
+2006 2011 2016 
+2190  710  285 

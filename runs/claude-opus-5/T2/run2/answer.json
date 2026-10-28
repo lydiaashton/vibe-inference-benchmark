@@ -1,0 +1,42 @@
+{
+  "estimate": 0.2133,
+  "ci_low": -0.0518,
+  "ci_high": 1.829,
+  "ci_method": "Anderson-Rubin 95% weak-instrument-robust confidence set (HC1), computed by grid inversion over beta in [-60, 60] at 0.0002-0.05 resolution; the set is a single bounded interval. Reported instead of the conventional 2SLS Wald interval because the first stage is weak (robust F = 4.22 < 10), which invalidates normal-approximation inference. For reference, the naive 2SLS HC1 Wald interval is [0.018, 0.408] and the homoskedastic AR interval is [-0.008, 1.643].",
+  "claim": "inconclusive",
+  "specifications_run": [
+    "OLS: log_wage ~ years_school (b=0.1297, HC1 se=0.0050)",
+    "OLS: log_wage ~ years_school + parent_educ (b=0.1285, se=0.0051)",
+    "OLS: log_wage ~ years_school + parent_educ + female (b=0.1278, se=0.0050) -- naive/benchmark, not causal",
+    "First stage: years_school ~ dist_college_miles + parent_educ + female (dist coef = -0.0081, HC1 se=0.0039; F=4.22 robust, 4.39 homoskedastic; partial R2 = 0.0029)",
+    "Reduced form: log_wage ~ dist_college_miles + parent_educ + female (dist coef = -0.00171, HC1 se=0.00095, p=0.072)",
+    "2SLS, instrument dist_college_miles, controls parent_educ + female, homoskedastic SE (b=0.2133, se=0.1008)",
+    "2SLS, same, HC1 robust SE (b=0.2133, se=0.0994) -- preferred point estimate",
+    "LIML, same specification (b=0.2133, se=0.0994; coincides with 2SLS in the just-identified case)",
+    "2SLS with no controls (b=0.2147, se=0.0922)",
+    "2SLS adding parent_educ^2 as control (b=0.2155, se=0.0996)",
+    "2SLS using log(distance) as the instrument (b=0.3314, se=0.2308; first-stage F=1.37) -- discarded, first stage collapses",
+    "2SLS using above-median-distance binary instrument (b=0.5738, se=1.0369; first-stage F=0.22) -- discarded, no first stage",
+    "2SLS with dist and dist^2 as two instruments (b=0.1614, se=0.0872; joint first-stage F=2.10; Sargan p=0.17) -- overidentification test uninformative because both instruments are weak",
+    "2SLS trimming distance above the 99th percentile (n=1485; b=0.2507, se=0.1477; F=2.30)",
+    "2SLS trimming distance above the 95th percentile (n=1425; b=0.3200, se=0.2838; F=0.88) -- first stage driven by a handful of very-long-distance observations",
+    "Anderson-Rubin confidence set by grid inversion, HC1 and homoskedastic versions",
+    "Nonparametric bootstrap of 2SLS, B=2000 (median 0.208; 2.5-97.5 percentiles [-0.109, 0.739]; 4.5% of draws negative; range -8.4 to 9.2)",
+    "Bootstrap of the first-stage F, B=500 (median 3.76; 5th percentile 0.15; 87.8% of draws below 10)",
+    "Monte Carlo calibrated to the estimated first stage with true beta=0.128: naive 2SLS Wald interval coverage 0.993, power to reject beta=0 only 0.30"
+  ],
+  "assumptions_checked": [
+    "Data integrity: 1500 rows, no missing values, no duplicate person_id, all variables in plausible ranges (years_school 8-19, distance 0-103 miles, parent_educ 8-18, female share 0.46). No cleaning needed.",
+    "Instrument relevance (THE BINDING PROBLEM): first-stage coefficient on distance is -0.0081 years per mile, HC1 se 0.0039, robust F = 4.22 (homoskedastic F = 4.39), partial R2 = 0.0029. This is far below the Staiger-Stock rule of thumb and the Stock-Yogo 10% maximal-bias critical value of ~16.4 for one instrument; with one instrument the Montiel Olea-Pflueger effective F equals this robust F. Identification is weak, so conventional 2SLS standard errors and t-tests are not valid.",
+    "Relevance fragility: the first stage is not robust. Dropping the top 1% of distances cuts F to 2.30 and the top 5% to 0.88; using log(distance) gives F=1.37 and a binary far/near split gives F=0.22. The bootstrap 5th percentile of F is 0.15. The first stage rests on a few very remote observations.",
+    "Instrument exogeneity (cannot be tested with one instrument; assessed indirectly): distance is uncorrelated with the observed controls -- distance on parent_educ b=-0.116 (p=0.40), on female b=0.356 (p=0.62) -- which is consistent with, but not proof of, exogeneity. With dist and dist^2 the Sargan test does not reject (p=0.17), but that test has essentially no power here because both instruments are weak. The exclusion restriction (distance affects wages only through schooling) remains an untested identifying assumption; standard concerns -- local labour markets, urban/rural wage differences, residential sorting -- cannot be ruled out with these variables.",
+    "Reduced form: distance has no significant effect on wages (coef -0.00171, p=0.072). There is no statistically significant instrument-outcome relationship to scale up, which is the same information as the AR test and is why the AR interval contains zero.",
+    "Endogeneity of schooling: Wu-Hausman F=0.86 (p=0.354) and Wooldridge regression test chi2=0.82 (p=0.365) fail to reject exogeneity of years_school. This does NOT license using OLS as causal -- the test is powered by the same weak instrument and the calibrated Monte Carlo shows only 30% power, so it cannot distinguish 'no endogeneity' from 'no information'.",
+    "Heteroskedasticity: Breusch-Pagan on the OLS wage equation LM=0.89 (p=0.83) and on the first stage LM=1.10 (p=0.78); no evidence of heteroskedasticity. HC1 standard errors reported anyway and they barely differ from homoskedastic ones.",
+    "Functional form / outliers: residual diagnostics show no skew or excess kurtosis (Jarque-Bera p=0.098 for OLS); results are insensitive to adding parent_educ^2; the only influential-observation problem is in the first stage, documented above.",
+    "Inference validity under weak identification: checked by grid-inverted Anderson-Rubin confidence set (valid regardless of instrument strength), bootstrap distribution of 2SLS (long-tailed, 4.5% sign flips), and a calibrated simulation showing the naive 2SLS Wald interval is badly mis-sized (99.3% coverage, i.e. uninformative rather than anti-conservative here) with only 30% power. All three agree the naive interval should not be used.",
+    "LATE interpretation: even if the design were strong, 2SLS with distance identifies a local effect for people whose schooling responds to proximity to a college (a college-margin LATE), not an average return for the whole population. Monotonicity (no one is induced to get less schooling by living closer) is untestable here."
+  ],
+  "headline_claim": "Instrumenting schooling with distance to college yields a point estimate of 0.213 log points per year of schooling, but the instrument is too weak (first-stage F = 4.2, partial R-squared = 0.003) for this design to identify the causal return: the weak-instrument-robust 95% confidence interval runs from -0.05 to 1.83 and includes zero, so these data are uninformative about the magnitude of the causal effect.",
+  "first_stage_F": 4.224
+}

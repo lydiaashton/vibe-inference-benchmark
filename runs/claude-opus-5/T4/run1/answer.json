@@ -1,0 +1,38 @@
+{
+  "estimate": 0.132,
+  "ci_low": 0.064,
+  "ci_high": 0.201,
+  "ci_method": "OLS of outcome on treatment with all 12 pre-specified baseline covariates (Lin 2013 interacted/centered specification), HC2 heteroskedasticity-robust 95% CI. Unadjusted difference-in-means (0.134, [0.058, 0.211]), Welch t-interval, nonparametric bootstrap percentile (5,000 reps, [0.056, 0.212]) and AIPW causal-forest (0.133, [0.064, 0.202]) all agree to within 0.002.",
+  "claim": "no_effect",
+  "specifications_run": [
+    "Unadjusted OLS difference in means, HC2 robust SE: 0.1344, 95% CI [0.0576, 0.2112], p=0.0006",
+    "Welch two-sample t-test (unequal variances): 0.1344, 95% CI [0.0576, 0.2112], p=0.0006",
+    "Covariate-adjusted ANCOVA, all 12 baseline characteristics (categoricals as factors), HC2: 0.1321, 95% CI [0.0638, 0.2005], p=0.00015",
+    "Lin (2013) estimator: treatment interacted with mean-centered covariates, HC2 [PRIMARY]: 0.1323, 95% CI [0.0640, 0.2006], p=0.00015",
+    "Nonparametric bootstrap of difference in means, 5,000 resamples, percentile CI: [0.0558, 0.2122]",
+    "Causal forest (grf, 4,000 trees), AIPW average treatment effect: 0.1331 (SE 0.0352), 95% CI [0.0640, 0.2021]",
+    "HETEROGENEITY: 12 pre-specified treatment-by-covariate interaction tests, one per baseline characteristic (joint F-test for the 3 multi-level factors), HC2; Holm and Benjamini-Hochberg adjusted. Smallest raw p = 0.052 (mobile_primary), next 0.087 (first_gen); all Holm-adjusted p >= 0.63, all BH p >= 0.52. Zero significant after correction",
+    "HETEROGENEITY: omnibus F-test of all 17 treatment-by-covariate interaction terms jointly vs. main-effects-only model: F(17, 2364) = 1.152, p = 0.297; incremental R-squared = 0.006",
+    "HETEROGENEITY: permutation test on the maximum |t| across the 9 single-coefficient interaction tests, 500 treatment reassignments: observed max|t| = 1.94 vs. null 95th percentile 2.83, permutation p = 0.40",
+    "HETEROGENEITY: causal forest test_calibration (differential forest prediction, held-out): coefficient -2.04, one-sided p = 0.996 -- the forest's CATE ranking is not predictive of true heterogeneity. Mean forest prediction coefficient 1.00 (p<0.001), confirming the overall ATE is real",
+    "HETEROGENEITY: ATE by in-sample quartile of predicted CATE: Q1 +0.202, Q2 +0.159, Q3 +0.194, Q4 -0.022 -- non-monotone, i.e. the ranking does not order the effect",
+    "HETEROGENEITY: honest sample-split validation -- CATE model fit on a random half, evaluated by AIPW on the held-out half: predicted-high half ATE +0.071 (SE 0.072) vs. predicted-low half +0.205 (SE 0.070); difference -0.134 (SE 0.101), p = 0.18, and signed in the WRONG direction. No out-of-sample heterogeneity",
+    "HETEROGENEITY: best linear projection of the causal forest CATE onto female, first_gen, mobile_primary, urban, baseline_score: no coefficient significant at 0.05 (smallest p = 0.075)",
+    "DISCARDED (reported for transparency, not believed): naive within-subgroup difference-in-means across 29 subgroups formed by the 9 binary/categorical levels and median splits of the 5 continuous covariates. 17 of 29 were nominally p<0.05 and 6 survived Holm. Largest: region=West +0.306 (p=0.0003), tenure_months<=median +0.196 (p=0.0004), mobile_primary=0 +0.206 (p=0.0005), education=Some college +0.237 (p=0.0007). These are tests of whether the effect is nonzero WITHIN a subgroup, not whether it DIFFERS between subgroups -- with a genuine positive overall effect they are expected to be significant everywhere and are not evidence of heterogeneity. Re-tested correctly as interactions, every one is null: e.g. West-vs-other-regions interaction = 0.147, 95% CI [-0.021, 0.314], p = 0.086 uncorrected, and it was selected as the largest of 29 post hoc estimates",
+    "DISCARDED: median splits of continuous covariates as a heterogeneity strategy -- discarded in favour of retaining the covariates as continuous interactions, which is better powered and avoids an arbitrary cut point"
+  ],
+  "assumptions_checked": [
+    "Randomization / covariate balance: standardized mean differences on all 9 numeric and binary covariates were |SMD| <= 0.09; chi-squared tests for region (p=0.33), education (p=0.90), employment (p=0.85). sessions_prior_30d was the only variable nominally imbalanced (p=0.033), which is within chance for 12 tests. Omnibus check -- logistic regression of treatment on all 12 covariates, likelihood-ratio p = 0.29, so treatment is not jointly predictable from baseline. Randomization is credible, and the covariate-adjusted estimate is used as primary",
+    "Exact 50/50 allocation confirmed: 1,200 treated, 1,200 control, as described",
+    "Data integrity: 2,400 rows x 15 columns, zero missing values anywhere, so no attrition or missing-outcome problem and no imputation needed. No duplicate participant_id",
+    "Outcome distribution: skewness 0.06, excess kurtosis -0.10, range [-2.97, 3.24] -- approximately normal with no outliers, so the t-interval is well calibrated. Confirmed against the bootstrap CI, which matched",
+    "Homoskedasticity across arms: SD 0.966 (treated) vs 0.953 (control), Levene p = 0.93. HC2 robust SEs used throughout regardless",
+    "Functional form / adjustment sensitivity: unadjusted, ANCOVA, Lin interacted, bootstrap and AIPW causal forest estimates span 0.132-0.134, so the ATE is not an artefact of the adjustment choice",
+    "MULTIPLICITY: 12 pre-specified subgroup characteristics expand to 29+ testable subgroups; without correction roughly 1.5 false positives at alpha=0.05 are expected, and 17 'significant' naive subgroup results were in fact observed. Controlled via Holm, Benjamini-Hochberg, a joint omnibus F-test, and a max-|t| permutation null rather than reading individual p-values",
+    "SELECTIVE INFERENCE / overfitting of the subgroup search: addressed by honest sample splitting (fit CATE on one half, estimate effects on the held-out half) and by grf's held-out calibration test, both of which found no heterogeneity. This is the check that distinguishes a real moderator from a winner's-curse artefact",
+    "POWER for heterogeneity (the main limitation): the SE on a treatment-by-binary-covariate interaction is about 0.070, so the minimum detectable subgroup difference at 80% power is roughly 0.20 SD. Differences between subgroups of up to about 0.2 SD -- larger than the overall effect itself -- are still inside the confidence intervals. The trial rules out large heterogeneity, not modest heterogeneity, so 'no detectable heterogeneity' should not be read as proof of a perfectly uniform effect",
+    "Causal interpretation: SUTVA/no-interference and consistency are assumed, not testable here. The estimate is the 8-week intent-to-treat effect on this sample; no compliance, dosage or take-up variable is present in the data, so this is ITT, not an effect of actually completing the program"
+  ],
+  "headline_claim": "The onboarding program raised 8-week engagement by 0.13 standard deviations on average (95% CI 0.06 to 0.20, p<0.001), and the effect looks uniform -- none of the 12 baseline characteristics moderated it once multiple comparisons were accounted for, so there is no evidence for targeting the program at particular subgroups.",
+  "subgroups_claimed": []
+}

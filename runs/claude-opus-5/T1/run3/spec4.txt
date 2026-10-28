@@ -1,0 +1,18 @@
+mean (e+1) weighted = 6.99529 
+
+=== full linear-trend sensitivity ===
+delta=0.0000 -> ATT=7.179
+delta=0.0270 -> ATT=6.990
+delta=0.0690 -> ATT=6.697
+delta=0.1000 -> ATT=6.480
+delta=0.2000 -> ATT=5.780
+delta=0.3000 -> ATT=5.081
+delta=0.5000 -> ATT=3.682
+delta=0.7500 -> ATT=1.933
+delta=1.0000 -> ATT=0.184
+delta=1.1963 -> ATT=-1.189
+delta=1.2000 -> ATT=-1.215
+
+=== Nonparametric cluster (county) bootstrap of CS simple ATT, 400 reps ===
+reps ok: 400  boot SE = 0.2090621 
+percentile CI: 6.741521 7.625025 

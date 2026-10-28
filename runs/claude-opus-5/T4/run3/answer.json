@@ -1,0 +1,43 @@
+{
+  "estimate": 0.132,
+  "ci_low": 0.064,
+  "ci_high": 0.201,
+  "ci_method": "OLS with Lin (2013) covariate adjustment (all 12 baseline covariates, mean-centered, fully interacted with treatment), HC2 heteroskedasticity-robust SEs, t-distribution 95% CI. Agrees closely with the unadjusted difference in means (0.134, HC2 CI [0.058, 0.211]), a nonparametric bootstrap (10,000 reps: [0.057, 0.211]), and an AIPW causal-forest ATE (0.134, SE 0.035); randomization-inference p = 0.0006.",
+  "claim": "no_effect",
+  "specifications_run": [
+    "Unadjusted difference in means, Welch t-test (ATE = 0.1344, p = 0.0006)",
+    "OLS outcome ~ treat with HC2 robust SEs (0.1344, CI [0.0576, 0.2112])",
+    "ANCOVA: OLS outcome ~ treat + baseline_score, HC2 (0.1325, CI [0.0638, 0.2013])",
+    "OLS with all 12 baseline covariates entered linearly, HC2 (0.1321, CI [0.0638, 0.2005])",
+    "Lin (2013) estimator: mean-centered covariates fully interacted with treat, HC2 (0.1323, CI [0.0640, 0.2006]) -- PRIMARY",
+    "Nonparametric bootstrap of the difference in means, 10,000 resamples (CI [0.0567, 0.2106])",
+    "Randomization inference on the ATE, 10,000 treatment permutations (p = 0.0006)",
+    "Mann-Whitney U rank test on outcome (p = 0.0010)",
+    "Rank-transformed outcome regression (treatment shifts outcome by 3.9 percentiles)",
+    "Outcome trimmed at 1st/99th percentiles, OLS HC2 (0.1257, CI [0.0531, 0.1983])",
+    "AIPW doubly-robust ATE from causal forest, 4,000 trees, known propensity 0.5 (0.1343, SE 0.0352)",
+    "Omnibus F-test of all 17 treatment x covariate interactions jointly (F = 1.15, df 17/2364, p = 0.297)",
+    "HC2-robust Wald version of the same omnibus interaction test (chi2 = 20.19, p = 0.265)",
+    "29 one-subgroup-at-a-time CATEs (binary covariates, every level of region/education/employment, median splits of the 5 continuous covariates), each OLS HC2 -- DISCARDED as a heterogeneity test: these estimate ATE + noise, not differences between groups",
+    "12 treatment x moderator interaction tests (one per baseline characteristic; joint Wald tests for the 3 categorical variables), HC2",
+    "Holm and Benjamini-Hochberg multiplicity adjustment of those 12 interaction tests (smallest raw p = 0.107 for mobile_primary; Holm p = 1.00, BH p = 0.48; nothing significant)",
+    "Randomization inference on the maximum |t| of the interaction across 20 candidate subgroup splits -- multiplicity-corrected test for ANY heterogeneity (observed max |t| = 2.36 for region=West vs. null mean 2.19 and null 95th percentile 3.08; p = 0.333)",
+    "Causal forest test_calibration / differential forest prediction (mean.forest.prediction = 1.00, p < 0.001; differential.forest.prediction = -2.32, one-sided p = 0.998 -- no detectable heterogeneity)",
+    "Best linear projection of the causal-forest CATE on all 12 covariates (no covariate significant after multiplicity adjustment; largest was education='Some college', raw p = 0.036, Bonferroni p = 0.62)",
+    "Quartiles of out-of-bag predicted CATE, ATE re-estimated within each (0.19 / 0.25 / 0.15 / -0.03 -- ordering inverted relative to prediction, i.e. the forest found no real signal)",
+    "Minimum-detectable-interaction / power calculation for balanced subgroup splits (MDI at 80% power ~= 0.22 SD)"
+  ],
+  "assumptions_checked": [
+    "Randomization / covariate balance: regressed each of 20 baseline covariate indicators on treat (HC2). All standardized differences |d| <= 0.09; only sessions_prior_30d nominally significant (p = 0.033), which is expected from 20 tests. Omnibus F-test of treat on all covariates: F = 1.15, p = 0.295 -- consistent with successful randomization.",
+    "Equal group sizes and design integrity: exactly 1200 treated / 1200 control, as stated.",
+    "Missing data / attrition: zero missing values in all 15 columns across all 2,400 rows, so no differential-attrition or missing-outcome bias to adjust for.",
+    "Equal variances across arms: Levene p = 0.93 (SD 0.966 treated vs 0.953 control); HC2 robust SEs used regardless.",
+    "Normality of residuals (for t-based CI): Shapiro-Wilk p = 0.24, skew = 0.06, excess kurtosis = -0.10. Also confirmed by bootstrap and randomization inference, which require no normality.",
+    "Outliers / influence: max Cook's D = 0.0047 (far below any 4/n threshold); 1%/99% trimmed and rank-based estimates agree with the main result.",
+    "Functional form of covariate adjustment: unadjusted, ANCOVA, linear-additive, and Lin fully-interacted specifications all give 0.126-0.134, so the ATE is not an artifact of the adjustment choice.",
+    "Multiple comparisons in the subgroup analysis: controlled via Holm, Benjamini-Hochberg, and randomization inference on the max |t| across candidate splits.",
+    "Power for heterogeneity: interaction SEs are ~0.078-0.082 for balanced splits, so the minimum detectable interaction at 80% power is ~0.22 SD. Differences between subgroups larger than ~0.22 SD are ruled out; genuinely small differences (< ~0.2 SD) cannot be excluded by this sample."
+  ],
+  "headline_claim": "The onboarding program raised eight-week engagement by 0.13 standard deviations on average (95% CI 0.06 to 0.20, p < 0.001), and the effect appears uniform -- no subgroup was shown to benefit more or less once multiple comparisons are accounted for.",
+  "subgroups_claimed": []
+}

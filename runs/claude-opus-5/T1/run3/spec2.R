@@ -1,0 +1,43 @@
+library(did); library(fixest)
+d <- read.csv("/Users/lydiaashton/vib-bench-runs/runs/claude-opus-5/T1/run3/data.csv")
+d$g <- ifelse(is.na(d$adoption_year), 0, d$adoption_year)
+sink("spec2.txt")
+cat("==== A. Static TWFE ====\n")
+m1 <- feols(new_biz_per_10k ~ program | county_id + year, data=d, cluster=~county_id)
+print(summary(m1)); print(confint(m1))
+
+cat("\n==== B. TWFE + county linear trends ====\n")
+m2 <- feols(new_biz_per_10k ~ program | county_id[year] + year, data=d, cluster=~county_id)
+print(summary(m2)); print(confint(m2))
+
+cat("\n==== C. CS never-treated, simple ====\n")
+set.seed(1); cs1 <- att_gt("new_biz_per_10k","year","county_id","g",data=d,control_group="nevertreated",biters=2000)
+a1<-aggte(cs1,type="simple",na.rm=TRUE); print(a1)
+cat("\n==== D. CS not-yet-treated, simple ====\n")
+set.seed(1); cs2 <- att_gt("new_biz_per_10k","year","county_id","g",data=d,control_group="notyettreated",biters=2000)
+a2<-aggte(cs2,type="simple",na.rm=TRUE); print(a2)
+cat("pretest p notyet:", cs2$Wpval, "\n")
+
+cat("\n==== E. CS never-treated, universal base period ====\n")
+set.seed(1); cs3 <- att_gt("new_biz_per_10k","year","county_id","g",data=d,control_group="nevertreated",base_period="universal",biters=2000)
+print(aggte(cs3,type="simple",na.rm=TRUE))
+
+cat("\n==== F. CS, analytical (non-bootstrap) SE, never-treated simple ====\n")
+set.seed(1); cs4 <- att_gt("new_biz_per_10k","year","county_id","g",data=d,control_group="nevertreated",bstrap=FALSE)
+print(aggte(cs4,type="simple",na.rm=TRUE,bstrap=FALSE))
+
+cat("\n==== G. Sun-Abraham (sunab), never-treated ref ====\n")
+d$cohort_sa <- ifelse(d$g==0, 10000, d$g)
+m3 <- feols(new_biz_per_10k ~ sunab(cohort_sa, year) | county_id + year, data=d, cluster=~county_id)
+print(summary(m3, agg="att"))
+print(confint(summary(m3, agg="att")))
+
+cat("\n==== H. Drop 2006 cohort (only 1 pre-period) : CS simple ====\n")
+dd <- subset(d, g!=2006)
+set.seed(1); cs5 <- att_gt("new_biz_per_10k","year","county_id","g",data=dd,control_group="nevertreated",biters=2000)
+print(aggte(cs5,type="simple",na.rm=TRUE))
+cat("pretest p:", cs5$Wpval,"\n")
+
+cat("\n==== I. Treated-county-year weights check ====\n")
+print(table(d$g[d$program==1]))
+sink()
