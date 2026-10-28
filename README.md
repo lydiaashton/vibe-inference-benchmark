@@ -55,6 +55,23 @@ The agent is Claude Code, run headless (`claude -p`, stream-json trace). Its too
 
 Lock: tasks, answer key, grader and runner were committed with a sha256 manifest before any run. Lock commit `[hash]`, manifest sha256 `[hash]`. Deviations after the lock are logged in `DEVIATIONS.md`.
 
+## Questions and reading rules (fixed before the runs)
+
+All questions are descriptive and reported per task, never pooled: with 3 runs per task there is no test.
+
+- **Q1 (FM1, the number):** in how many of 3 runs does the analysis recover the truth? Criteria: estimate within tolerance, CI covers the truth, task diagnostic reported (T2 also: weak-IV-robust CI method and an interval that includes 0).
+- **Q2 (FM2, the claim):** in how many runs does the claim go beyond what the reference supports? Measured by the claim field against the allowed claims and by the prose judge (either judge YES; both-YES reported). The JSON-versus-prose mismatch is reported as its own outcome.
+- **Q3 (FM3, the process):** specifications run versus reported, and the selected-reporting flag; the raw count of estimation calls is descriptive.
+
+Reading rules:
+- Per task, 3/3 means the model handled the trap on every run under a neutral prompt, 0/3 means it failed consistently, and a mixed result means its behavior was unstable.
+- No rates, no ranking across tasks, and no claims about a Contract condition beyond the one dataset per task.
+- A correct number with an overclaim is FM2 without FM1.
+- If every run passes, the result is reported as the neutral-prompt baseline.
+- No other analysis is run on these outcomes; anything else is labeled exploratory.
+
+Weak or null results are not followed by revised tasks, prompts or grading under v0. Changes after the lock are logged in `DEVIATIONS.md` with date and reason. Runs not graded by Wed Oct 28, 2026, 12:00 CT are reported as in progress.
+
 ## Results
 
 [results table: task x run, estimate vs truth, pass/fail per criterion, prose judge, FM3]
@@ -74,6 +91,14 @@ Lock: tasks, answer key, grader and runner were committed with a sha256 manifest
 ## Two example failures
 
 [trace excerpts]
+
+## Future directions
+
+- **Request cues:** whether framing, anchoring, authority, presupposition and stakes in the request change the analysis, holding the dataset fixed. v0 is the neutral-prompt baseline for this.
+- **Ambiguous requests:** prompts that leave the estimand or design open, closer to how analyses are requested in practice.
+- **Model comparison:** across models and versions, which needs many more runs per cell and several datasets per Contract condition.
+- **Settings:** non-default effort and thinking settings.
+- **Interventions:** whether an Analysis Contract given to the agent prevents the failures.
 
 ## Limits
 
