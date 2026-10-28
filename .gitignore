@@ -12,3 +12,4 @@ bias-study-sketch.md
 # task data must be in the repo (overrides a global *.csv / *.gz ignore)
 !tasks/**/*.csv
 !tasks/**/*.csv.gz
+review/
