@@ -105,7 +105,9 @@ def judge_run(model, task, run):
 def main(argv):
     if len(argv) == 3:
         return judge_run(*argv)
-    for rd in sorted((ROOT / "runs").glob("*/T*/run*")):
+    import re
+    for rd in sorted(p for p in (ROOT / "runs").glob("*/T*/run*")
+                     if re.fullmatch(r"run\d+", p.name) and re.fullmatch(r"T\d", p.parent.name) and " " not in p.parent.parent.name):
         m, t = rd.parent.parent.name, rd.parent.name
         if not (ROOT / "results" / "judge" / f"{m}_{t}_{rd.name}.json").exists():
             judge_run(m, t, rd.name)

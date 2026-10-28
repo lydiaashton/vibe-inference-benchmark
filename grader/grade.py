@@ -164,10 +164,11 @@ def grade_run(task, run_dir, key, model=""):
 
 def main():
     rows = []
-    for kp in sorted((ROOT / "answer_key").glob("T*/truth.json")):
+    for kp in sorted(p for p in (ROOT / "answer_key").glob("T*/truth.json") if re.fullmatch(r"T\d", p.parent.name)):
         task = kp.parent.name
         key = json.loads(kp.read_text())
-        for rd in sorted((ROOT / "runs").glob(f"*/{task}/run*")):
+        # exact names only: iCloud sync can create "run1 2" copies, which must not be graded
+        for rd in sorted(p for p in (ROOT / "runs").glob(f"*/{task}/run*") if re.fullmatch(r"run\d+", p.name) and " " not in p.parent.parent.name):
             rows.append(grade_run(task, rd, key, model=rd.parent.parent.name))
     out = ROOT / "results"
     out.mkdir(exist_ok=True)
