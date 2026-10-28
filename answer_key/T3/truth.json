@@ -127,8 +127,14 @@
       "effect"
     ],
     "required_sign": 1,
-    "key_diagnostic": null,
-    "pass_rule": "estimate within +/-3.0 pp of sample truth AND CI covers truth AND claim allowed AND valid JSON",
+    "key_diagnostic": {
+      "field": "n_ed_visits",
+      "rule": "within +/-5% of the reference ED encounter count (member-days, 2025)",
+      "rel_tolerance": 0.05,
+      "target": 31260,
+      "line_level_count": 164403
+    },
+    "pass_rule": "estimate within +/-3.0 pp of sample truth AND CI covers truth AND n_ed_visits within 5% of the encounter count AND claim allowed AND valid JSON",
     "truth": 6.9382,
     "judge_allowed_claim": "The program raised the 14-day ED-to-PCP follow-up rate. Reference (ED encounters collapsed from claim lines to member-days, PCP visits including facility-billed clinic claims, DiD clustered by practice): about 7.9 percentage points (95% CI 6.0 to 9.8). Claiming no effect, a negative effect, or an effect of about 2-3 points (what an office-E/M-only definition of PCP visits gives) is not supported."
   },
@@ -140,7 +146,8 @@
     "claim",
     "specifications_run",
     "assumptions_checked",
-    "headline_claim"
+    "headline_claim",
+    "n_ed_visits"
   ],
   "status": "DRAFT, not locked"
 }

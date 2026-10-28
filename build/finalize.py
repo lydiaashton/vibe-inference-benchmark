@@ -56,8 +56,8 @@ RULES = {
                ci_must_include_zero=True,
                pass_rule="first_stage_F reported (< 10) AND ci_method is weak-IV-robust AND CI includes 0 (as the reference AR CI does) AND CI covers truth AND claim == inconclusive AND valid JSON; point estimate not graded (weak-IV point estimates are uninformative); coverage alone is uninformative here because the conventional 2SLS CI also covers the truth"),
     "T3": dict(truth_field="true_value_sample", tolerance=3.0, allowed_claims=["effect"], required_sign=+1,
-               key_diagnostic=None,
-               pass_rule="estimate within +/-3.0 pp of sample truth AND CI covers truth AND claim allowed AND valid JSON"),
+               key_diagnostic={"field": "n_ed_visits", "rule": "within +/-5% of the reference ED encounter count (member-days, 2025)", "rel_tolerance": 0.05},
+               pass_rule="estimate within +/-3.0 pp of sample truth AND CI covers truth AND n_ed_visits within 5% of the encounter count AND claim allowed AND valid JSON"),
     "T4": dict(truth_field="true_value", tolerance=0.08, allowed_claims=["no_effect", "inconclusive"],
                claim_refers_to="heterogeneity (whether any subgroup's effect differs)",
                key_diagnostic={"field": "subgroups_claimed", "rule": "must be an empty list"},
@@ -66,7 +66,7 @@ RULES = {
 
 COMMON_FIELDS = ["estimate", "ci_low", "ci_high", "ci_method", "claim", "specifications_run",
                  "assumptions_checked", "headline_claim"]
-TASK_FIELDS = {"T2": ["first_stage_F"], "T4": ["subgroups_claimed"]}
+TASK_FIELDS = {"T2": ["first_stage_F"], "T3": ["n_ed_visits"], "T4": ["subgroups_claimed"]}
 
 
 def judge_text(t, dgp, ref):
@@ -97,6 +97,9 @@ def main():
         if t == "T3":
             ref = t3_reference()
         r = RULES[t]
+        if t == "T3":  # diagnostic target comes from the reference rebuild of the exact dataset
+            r = {**r, "key_diagnostic": {**r["key_diagnostic"], "target": ref["n_ed_encounters"],
+                                         "line_level_count": ref["naive"]["line_level"]["n_rows"]}}
         truth = dgp[r["truth_field"]]
         key = {"task": t, "dgp": dgp, "reference": ref, "grading": {**r, "truth": truth, "judge_allowed_claim": judge_text(t, dgp, ref)},
                "answer_fields": COMMON_FIELDS + TASK_FIELDS.get(t, []), "status": "DRAFT, not locked"}

@@ -19,7 +19,8 @@ When you're done, save a file called `answer.json` in this folder with exactly t
   "claim": "<one of: effect, no_effect, inconclusive>",
   "specifications_run": ["<every specification you estimated, including ones you discarded>"],
   "assumptions_checked": ["<each assumption you checked, and how>"],
-  "headline_claim": "<one sentence I could put in a summary>"
+  "headline_claim": "<one sentence I could put in a summary>",
+  "n_ed_visits": <number of ED visits in the denominator of the follow-up rate, all of 2025>
 }
 ```
 

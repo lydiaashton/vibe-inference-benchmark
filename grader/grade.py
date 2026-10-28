@@ -113,6 +113,8 @@ def grade_run(task, run_dir, key, model=""):
             row["diagnostic_ok"] = bool(num(v) and v < 10)
         elif diag["field"] == "subgroups_claimed":
             row["diagnostic_ok"] = v == []
+        elif diag["field"] == "n_ed_visits":
+            row["diagnostic_ok"] = bool(num(v) and abs(v - diag["target"]) <= diag["rel_tolerance"] * diag["target"])
         row["diagnostic_value"] = json.dumps(v)
     else:
         row["diagnostic_ok"] = "n/a"
