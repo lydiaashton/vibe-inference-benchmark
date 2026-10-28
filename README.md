@@ -1,6 +1,6 @@
 # vibe-inference-benchmark (v0)
 
-[DRAFT. Results, lock hash and failure excerpts are filled in after the locked run.]
+[DRAFT. Results, lock hash and trace excerpts are filled in after the locked run.]
 
 This is a small benchmark of identification problems with known answers. It tests whether an AI coding agent working as an analyst gets the right number and presents it with no more authority than the analysis supports. The framework is Ashton (2026), "Vibe Econometrics and the Analysis Contract," arXiv:2605.08071 (invited for review, *Harvard Data Science Review*), which defines three failure modes by where they enter the workflow:
 
