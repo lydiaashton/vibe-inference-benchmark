@@ -1,6 +1,6 @@
 # vibe-inference-benchmark (v0)
 
-[DRAFT. Results, lock hash and trace excerpts are filled in after the locked run.]
+[DRAFT. Results and trace excerpts are filled in after the locked run.]
 
 This is a small benchmark of identification problems with known answers. It tests whether an AI coding agent working as an analyst gets the right number and presents it with no more authority than the analysis supports. The framework is Ashton (2026), "Vibe Econometrics and the Analysis Contract," arXiv:2605.08071 (invited for review, *Harvard Data Science Review*), which defines three failure modes by where they enter the workflow:
 
@@ -53,7 +53,7 @@ The agent is Claude Code, run headless (`claude -p`, stream-json trace). Its too
 - **Scoring by failure mode, on every run:** FM1 = the number (tolerance, coverage, task diagnostic); FM2 = the claim compared with the reference, plus the prose judge; FM3 = specifications run vs. reported.
 - **Grader validation:** the author spot-checked about 5 transcripts against the grader. This is grader validation, not independent rating.
 
-Lock: tasks, answer key, grader and runner were committed with a sha256 manifest before any run. Lock commit `[hash]`, manifest sha256 `[hash]`. Deviations after the lock are logged in `DEVIATIONS.md`.
+Lock: tasks, answer key, grader and runner were committed with a sha256 manifest before any run. Lock commit `39d6cc5385d859f7b93e64ff24b50ffee5daece0`, manifest sha256 `1ad26d9d6f2d2204ec12af85da3c7059f118608667bd16db340391330fe9b844` (verify with `shasum -a 256 -c MANIFEST.sha256`). Deviations after the lock are logged in `DEVIATIONS.md`.
 
 ## Questions and reading rules (fixed before the runs)
 
