@@ -88,7 +88,7 @@ Weak or null results are not followed by revised tasks, prompts or grading under
 - **Access:** each run executes in an isolated folder outside the repository containing only the task's data and prompt. The agent could not access the answer key, the generators, the grader, the internet or any other task. A contamination check scans each trace for references to these.
 - **Author's use of LLMs:** the benchmark code was written with Claude Code under the author's direction; task design, traps, tolerances and allowed claims are the author's and were fixed before the lock.
 
-## Two example failures
+## Example traces
 
 [trace excerpts]
 
